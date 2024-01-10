@@ -13,7 +13,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<AuthDbContxt<User, int>>(options => options.UseNpgsql("Server=localhost;Port=5432;Database=BSF;User Id=BSF;Password=BSF"));
+builder.Services.AddDbContext<AuthDbContxt<User, int>>(options => options.UseNpgsql("Server=localhost;Port=5432;Database=AuthModule;User Id=postgres; Password=superuser"));
 builder.Services.AddAuthentication().AddJwtBearer(JwtBearerDefaults.AuthenticationScheme)
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddPolicyScheme("JWT_OR_COOKIE", "JWT_OR_COOKIE", options =>

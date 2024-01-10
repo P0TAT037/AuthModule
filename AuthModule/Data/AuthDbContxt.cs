@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AuthModule.Data
 {
-    public class AuthDbContxt<TUser, TUserId> : DbContext where TUser : class, IUser<TUserId>
+    public class AuthDbContxt<TUser, TUserId> : DbContext where TUser : class, IUser<TUser, TUserId>
     {
 
         public AuthDbContxt(DbContextOptions options) : base(options)
@@ -25,6 +25,8 @@ namespace AuthModule.Data
             modelBuilder.Entity<TUser>()
                 .ToTable("Users")
                 .HasKey(x => x.Id);
+
+            //modelBuilder.Entity<TUser>().Property(x => x.Id).HasConversion<TUserId>();
 
             modelBuilder.Entity<TUser>()
                 .HasMany(x => x.Claims)
