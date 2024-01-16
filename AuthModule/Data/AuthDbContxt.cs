@@ -1,4 +1,5 @@
 ﻿using AuthModule.Data.Models;
+using AuthModule.Data.Models.Abstract;
 using Microsoft.EntityFrameworkCore;
 
 namespace AuthModule.Data
@@ -10,7 +11,6 @@ namespace AuthModule.Data
         {
 
         }
-
         public DbSet<TUser> Users { get; set; }
 
         public DbSet<Claim<TUser>> Claims { get; set; }
@@ -22,12 +22,24 @@ namespace AuthModule.Data
 
             modelBuilder.HasDefaultSchema("Auth");
 
+            #region TUser Config 
+            
             modelBuilder.Entity<TUser>()
                 .ToTable("Users")
                 .HasKey(x => x.Id);
 
-            //modelBuilder.Entity<TUser>().Property(x => x.Id).HasConversion<TUserId>();
+            modelBuilder.Entity<TUser>()
+                .HasIndex(x => x.Handle)
+                .IsUnique();
 
+            modelBuilder.Entity<TUser>()
+                .Property(x=>x.Handle)
+                .IsRequired();
+            
+            modelBuilder.Entity<TUser>()
+                .Property(x=>x.Password)
+                .IsRequired();
+            
             modelBuilder.Entity<TUser>()
                 .HasMany(x => x.Claims)
                 .WithMany(x => (IEnumerable<TUser>)x.Users)
@@ -38,9 +50,24 @@ namespace AuthModule.Data
                 .WithMany(x => (IEnumerable<TUser>)x.Users)
                 .UsingEntity(j => j.ToTable("UserRoles"));
 
+
+            #endregion
+
+
+            #region Claims Config
+
             modelBuilder.Entity<Claim<TUser>>()
                 .ToTable("Claims")
                 .HasKey(x => x.Id);
+
+            modelBuilder.Entity<Claim<TUser>>()
+                .Property(x => x.Name)
+                .IsRequired();
+
+            #endregion
+
+
+            #region Roles Config
 
             modelBuilder.Entity<Role<TUser>>()
                 .ToTable("Roles")
@@ -50,6 +77,12 @@ namespace AuthModule.Data
                 .HasMany(x => x.Claims)
                 .WithMany(x => x.Roles)
                 .UsingEntity(j => j.ToTable("RoleClaims"));
+
+            modelBuilder.Entity<Role<TUser>>()
+                .Property(x => x.Name)
+                .IsRequired();
+            
+            #endregion
         }
 
     }

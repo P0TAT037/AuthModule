@@ -1,4 +1,4 @@
-﻿namespace AuthModule.Data.Models
+﻿namespace AuthModule.Data.Models.Abstract
 {
     public interface IUser<TUser, TId>
     {
@@ -8,7 +8,7 @@
 
         public string Password { get; set; }
 
-        public IEnumerable<Claim<TUser>> Claims { get; set;}
-        public IEnumerable<Role<TUser>> Roles { get; set;}
+        public IEnumerable<Claim<TUser>> Claims { get; set; }
+        public IEnumerable<Role<TUser>> Roles { get; set; }
     }
 }

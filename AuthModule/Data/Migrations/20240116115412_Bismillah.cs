@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthModule.Migrations
 {
     /// <inheritdoc />
-    public partial class bismillah : Migration
+    public partial class Bismillah : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -155,6 +155,13 @@ namespace AuthModule.Migrations
                 schema: "Auth",
                 table: "UserRoles",
                 column: "UsersId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Handle",
+                schema: "Auth",
+                table: "Users",
+                column: "Handle",
+                unique: true);
         }
 
         /// <inheritdoc />

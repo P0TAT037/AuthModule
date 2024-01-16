@@ -8,14 +8,25 @@ using Microsoft.Net.Http.Headers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddDbContext<AuthDbContxt<User, int>>(options => options.UseNpgsql("Server=localhost;Port=5432;Database=AuthModule;User Id=postgres; Password=superuser"));
-builder.Services.AddAuthentication().AddJwtBearer(JwtBearerDefaults.AuthenticationScheme)
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+builder.Services.AddAuthentication()
     .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options=> 
+    {
+        options.TokenValidationParameters = new()
+        {
+            ValidateIssuer = true,
+            ValidateIssuerSigningKey = true,
+        };
+    })
     .AddPolicyScheme("JWT_OR_COOKIE", "JWT_OR_COOKIE", options =>
     {
         options.ForwardDefaultSelector = context =>

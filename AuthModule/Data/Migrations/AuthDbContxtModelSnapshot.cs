@@ -18,7 +18,7 @@ namespace AuthModule.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Auth")
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -75,6 +75,9 @@ namespace AuthModule.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Handle")
+                        .IsUnique();
 
                     b.ToTable("Users", "Auth");
                 });

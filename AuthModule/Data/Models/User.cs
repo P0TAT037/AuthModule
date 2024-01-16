@@ -2,6 +2,7 @@
 
 
 using System.Reflection.Metadata.Ecma335;
+using AuthModule.Data.Models.Abstract;
 
 namespace AuthModule.Data.Models
 {
