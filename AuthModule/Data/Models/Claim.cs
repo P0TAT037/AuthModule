@@ -4,7 +4,7 @@ namespace AuthModule.Data.Models
 {
     public class Claim<TUser>
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
 

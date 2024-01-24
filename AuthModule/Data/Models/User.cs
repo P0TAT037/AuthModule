@@ -11,7 +11,7 @@ namespace AuthModule.Data.Models
         public int Id { get; set; }
         public string Handle { get; set; }
         public string Password { get; set; }
-        public IEnumerable<Claim<User>> Claims { get; set; } = Enumerable.Empty<Claim<User>>();
-        public IEnumerable<Role<User>> Roles { get ; set ; } = Enumerable.Empty<Role<User>>();
+        public List<Claim<User>> Claims { get; set; } = new();
+        public List<Role<User>> Roles { get ; set ; } = new();
     }
 }

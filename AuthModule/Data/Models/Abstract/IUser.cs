@@ -8,7 +8,7 @@
 
         public string Password { get; set; }
 
-        public IEnumerable<Claim<TUser>> Claims { get; set; }
-        public IEnumerable<Role<TUser>> Roles { get; set; }
+        public List<Claim<TUser>> Claims { get; set; }
+        public List<Role<TUser>> Roles { get; set; }
     }
 }

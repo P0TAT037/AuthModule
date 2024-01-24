@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthModule.Migrations
 {
     [DbContext(typeof(AuthDbContxt<User, int>))]
-    [Migration("20240116115412_Bismillah")]
-    partial class Bismillah
+    [Migration("20240123123508_bismillah")]
+    partial class bismillah
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,8 +28,11 @@ namespace AuthModule.Migrations
 
             modelBuilder.Entity("AuthModule.Data.Models.Claim<AuthModule.Data.Models.User>", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -87,8 +90,8 @@ namespace AuthModule.Migrations
 
             modelBuilder.Entity("Claim<User>Role<User>", b =>
                 {
-                    b.Property<string>("ClaimsId")
-                        .HasColumnType("text");
+                    b.Property<int>("ClaimsId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("RolesId")
                         .HasColumnType("integer");
@@ -102,8 +105,8 @@ namespace AuthModule.Migrations
 
             modelBuilder.Entity("Claim<User>User", b =>
                 {
-                    b.Property<string>("ClaimsId")
-                        .HasColumnType("text");
+                    b.Property<int>("ClaimsId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("UsersId")
                         .HasColumnType("integer");

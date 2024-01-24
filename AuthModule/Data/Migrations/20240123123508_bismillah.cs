@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AuthModule.Migrations
 {
     /// <inheritdoc />
-    public partial class Bismillah : Migration
+    public partial class bismillah : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +19,8 @@ namespace AuthModule.Migrations
                 schema: "Auth",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "text", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Value = table.Column<string>(type: "text", nullable: false)
                 },
@@ -62,7 +63,7 @@ namespace AuthModule.Migrations
                 schema: "Auth",
                 columns: table => new
                 {
-                    ClaimsId = table.Column<string>(type: "text", nullable: false),
+                    ClaimsId = table.Column<int>(type: "integer", nullable: false),
                     RolesId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -89,7 +90,7 @@ namespace AuthModule.Migrations
                 schema: "Auth",
                 columns: table => new
                 {
-                    ClaimsId = table.Column<string>(type: "text", nullable: false),
+                    ClaimsId = table.Column<int>(type: "integer", nullable: false),
                     UsersId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
