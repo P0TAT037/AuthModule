@@ -4,12 +4,12 @@ using AutoMapper;
 
 namespace AuthModule.AutoMapperProfiles
 {
-    public class DefaultProfile : Profile
+    public class DefaultProfile<TUser, TUserDto> : Profile
     {
         public DefaultProfile() 
         {
-            CreateMap<User, UserDTO>();
-            CreateMap<UserDTO, User>();
+            CreateMap<TUser, TUserDto>();
+            CreateMap<TUserDto, TUser>();
         }
     }
 }

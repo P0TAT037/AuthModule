@@ -1,23 +1,70 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using AuthModule.Data;
+using AuthModule.Data.Models.Abstract;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 
-namespace AuthModule
+namespace AuthModule;
+
+public class AuthSettings<TUser, TUserId>
+    where TUser : class, IUser<TUser, TUserId>
 {
-    public class AuthSettings
+    private readonly List<PropertyInfo> userInfoClaims = new List<PropertyInfo>();
+
+    public delegate DbContextOptionsBuilder DbOptionsBuilder(DbContextOptionsBuilder optionsBuilder);
+
+    public bool UseCookies { get; set; }
+
+    public JwtTokenSettings? JwtTokenSettings { get; set; } = new();
+
+    public CookieSettings? CookieSettings { get; set; } = new();
+
+    public required DbOptionsBuilder ConfigureDbOptions { get; set; }
+
+    public Action<AuthDbContxt<TUser, TUserId>>? AuthDbInitializer { get; set; }
+    
+    public IEnumerable<PropertyInfo> UserInfoClaims => userInfoClaims;
+
+    public AuthSettings<TUser, TUserId> AddUserInfoClaim(string UserModelPropertyName)
     {
+        var property = typeof(TUser).GetProperty(UserModelPropertyName)!;
 
-        public bool UseCookies { get; set; }
-        public bool UseJWT { get; set; } = true;
+        if (property == null)
+            throw new Exception("no property with this name");
 
-        public JwtTokenSettings? JwtTokenSettings { get; set; }
+        userInfoClaims.Add(property);
+
+        return this;
+    }
+}
+
+public class JwtTokenSettings
+{
+    public string SecurityAlgorithm { get; set; } = SecurityAlgorithms.HmacSha256;
+    
+    public TimeSpan Expiration { get; set; } = TimeSpan.FromHours(1);
+    
+    public JwtBearerOptions? ConfigOptions { get; set; }
+
+    internal JwtBearerOptions ConfigureJwtBearerOptions(JwtBearerOptions o)
+    {
+        return ConfigOptions;
     }
 
-    public class JwtTokenSettings
+    //public void ConfigJwtOptions(JwtBearerOptions options)
+    //{
+
+    //}
+}
+
+public class CookieSettings
+{
+    public CookieAuthenticationOptions? CookieAuthenticationOptions { get; set; }
+    internal CookieAuthenticationOptions ConfigureCookieAuthenticationOptions(CookieAuthenticationOptions options) 
     {
-        public string SecurityAlgorithm { get; set; } = SecurityAlgorithms.HmacSha256;
-        public TimeSpan Expiration { get; set; } = TimeSpan.FromHours(1);
-        public TokenValidationParameters TokenValidationParameters { get; set; } = default;
+        return CookieAuthenticationOptions;
     }
+
 }

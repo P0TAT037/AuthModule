@@ -1,6 +1,6 @@
 ﻿using AuthModule.DTOs.Abstract;
 
-namespace AuthModule.DTOs
+namespace Sample.DTOs
 {
     public class UserDTO : IUserDto
     {

@@ -4,17 +4,19 @@ using AuthModule.Data;
 using AuthModule.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
-namespace AuthModule.Controllers.Abstract;
+namespace AuthModule.Controllers;
 
 [ApiController]
 [Route("api/auth/role")]
-public class Roles<TUser, TUserId> : ControllerBase
+[Authorize(AuthModuleConstValues.AdminPolicy)]
+public class RolesController<TUser, TUserId> : ControllerBase
    where TUser : class, IUser<TUser, TUserId>
 {
     private readonly AuthDbContxt<TUser, TUserId> _authDbContxt;
 
-    public Roles(AuthDbContxt<TUser, TUserId> authDbContxt)
+    public RolesController(AuthDbContxt<TUser, TUserId> authDbContxt)
     {
         _authDbContxt = authDbContxt;
     }
@@ -47,10 +49,18 @@ public class Roles<TUser, TUserId> : ControllerBase
     [HttpPost]
     public async Task<IActionResult> AddRoles(List<string> roles)
     {
-        List<Role<TUser>> r = roles.Select(x => new Role<TUser>() { Name = x}).ToList();
+        List<Role<TUser>> r = roles.Select(x => new Role<TUser>() { Name = x }).ToList();
 
-        await _authDbContxt.Roles.AddRangeAsync(r);
-        await _authDbContxt.SaveChangesAsync();
+        try
+        {
+            await _authDbContxt.Roles.AddRangeAsync(r);
+            await _authDbContxt.SaveChangesAsync();
+        }
+        catch (Exception ex)
+        {
+            await Console.Out.WriteLineAsync(ex.Message);
+            return BadRequest("there exists a role with the same name of one these roles");
+        }
 
         return Ok();
     }
@@ -63,7 +73,7 @@ public class Roles<TUser, TUserId> : ControllerBase
 
         if (role == null)
             return NotFound("no role with this id");
-        
+
         // shit code \\
         var claims = _authDbContxt.Claims.Where(x => claimIds.Contains(x.Id));
         role.Claims.AddRange(claims);
@@ -79,7 +89,7 @@ public class Roles<TUser, TUserId> : ControllerBase
     {
         try
         {
-            var role = await _authDbContxt.Roles.Include(x=>x.Claims).SingleAsync(x => x.Id == roleId);
+            var role = await _authDbContxt.Roles.Include(x => x.Claims).SingleAsync(x => x.Id == roleId);
             var claims = role.Claims.Select(x => new { x.Id, x.Name, x.Value });
             return Ok(claims);
         }
@@ -112,15 +122,22 @@ public class Roles<TUser, TUserId> : ControllerBase
     [Route("{id}")]
     public async Task<IActionResult> UpdateRole(int id, string newName)
     {
-        Role<TUser> role = new() { Id = id, Name = newName};
-        _authDbContxt.Update(role);
-        await _authDbContxt.SaveChangesAsync();
+        Role<TUser> role = new() { Id = id, Name = newName };
+        try
+        {
+            _authDbContxt.Update(role);
+            await _authDbContxt.SaveChangesAsync();
+        }
+        catch
+        {
+            return StatusCode(500, "falied to update role name, there might be a role with this name");
+        }
         return Ok(role.Id);
     }
 
     [HttpDelete]
     [Route("{id}")]
-    public async Task<IActionResult> DeleteClaim(int id)
+    public async Task<IActionResult> DeleteRole(int id)
     {
         await _authDbContxt.Roles.Where(x => x.Id == id).ExecuteDeleteAsync();
         return Ok();
