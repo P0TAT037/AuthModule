@@ -49,8 +49,8 @@ public static class Extensions
         }));
         
         var autheBuilder = services.AddAuthentication("JWT_OR_COOKIE")
-            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o=>authSettings.CookieSettings!.ConfigureCookieAuthenticationOptions(o))
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o => authSettings.JwtTokenSettings!.ConfigureJwtBearerOptions(o))
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, authSettings.CookieSettings!.ConfigureCookieAuthenticationOptions!)
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, authSettings.JwtTokenSettings!.ConfigureJwtBearerOptions!) 
             .AddPolicyScheme("JWT_OR_COOKIE", "JWT_OR_COOKIE", options =>
             {
                 options.ForwardDefaultSelector = context =>

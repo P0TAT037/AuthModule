@@ -57,9 +57,9 @@ var authSettings = new AuthSettings<User, int>
 
         SecurityAlgorithm = SecurityAlgorithms.HmacSha256,
         Expiration = TimeSpan.FromHours(1),
-        ConfigOptions = new()
+        ConfigOptions = (o) =>
         {
-            TokenValidationParameters = new()
+            o.TokenValidationParameters = new()
             {
                 ValidateIssuer = true,
                 ValidateActor = true,
@@ -69,9 +69,10 @@ var authSettings = new AuthSettings<User, int>
 
                 ValidIssuer = "elbatates",
                 ValidAudience = "3oshaqElBatates",
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes("HrafCOb3jt045IBZn1Z6RPUAxDkavf_INZzE9BwN3I0cQzuElDShtNCSXub5Ef7JazFot3iCJ3UBpIbIrHbtzA")),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(builder.Configuration["JwtKey"]!)),
 
-            }
+            };
+
         }
         
     }
@@ -83,7 +84,7 @@ authSettings
 
 builder.Services.AddAuthModule<User, UserDTO, int>(authSettings);
 
-builder.Services.AddAuthorization(opt => opt.AddPolicy(AuthModuleConstValues.AdminPolicy ,b =>
+builder.Services.AddAuthorization(opt => opt.AddPolicy(AuthModuleConstValues.AdminPolicy, b =>
 {
     b.RequireClaim(ClaimTypes.NameIdentifier);
 }));
@@ -98,6 +99,18 @@ if (app.Environment.IsDevelopment())
 }
 
 app.InitAuthModuleDb<User, int>();
+
+app.Use(async (context, _next) =>
+{
+    try
+    {
+        await _next(context);
+    }
+    catch(Exception ex)
+    {
+        Console.WriteLine(ex.Message);
+    }
+});
 
 app.UseHttpsRedirection();
 

@@ -21,12 +21,12 @@ namespace AuthModule.Services
         public JwtSecurityToken GetToken(ClaimsPrincipal claimsPrincipal)
         {
             var credentials = new SigningCredentials(
-                _jwtTokenSettings.ConfigOptions.TokenValidationParameters!.IssuerSigningKey,
+                _jwtTokenSettings.Options.TokenValidationParameters!.IssuerSigningKey,
                 _jwtTokenSettings.SecurityAlgorithm);
 
             return new JwtSecurityToken(
-                issuer: _jwtTokenSettings.ConfigOptions.TokenValidationParameters.ValidIssuer,
-                audience: _jwtTokenSettings.ConfigOptions.TokenValidationParameters.ValidAudience,
+                issuer: _jwtTokenSettings.Options.TokenValidationParameters.ValidIssuer,
+                audience: _jwtTokenSettings.Options.TokenValidationParameters.ValidAudience,
                 claimsPrincipal.Claims,
                 expires: DateTime.Now.Add(_jwtTokenSettings.Expiration),
                 signingCredentials: credentials
@@ -35,12 +35,12 @@ namespace AuthModule.Services
         public JwtSecurityToken GetToken(IEnumerable<Claim> claims)
         {
             var credentials = new SigningCredentials(
-                _jwtTokenSettings.ConfigOptions.TokenValidationParameters!.IssuerSigningKey,
+                _jwtTokenSettings.Options.TokenValidationParameters!.IssuerSigningKey,
                 _jwtTokenSettings.SecurityAlgorithm);
 
             return new JwtSecurityToken(
-                issuer: _jwtTokenSettings.ConfigOptions.TokenValidationParameters.ValidIssuer,
-                audience: _jwtTokenSettings.ConfigOptions.TokenValidationParameters.ValidAudience,
+                issuer: _jwtTokenSettings.Options.TokenValidationParameters.ValidIssuer,
+                audience: _jwtTokenSettings.Options.TokenValidationParameters.ValidAudience,
                 claims,
                 expires: DateTime.Now.Add(_jwtTokenSettings.Expiration),
                 signingCredentials: credentials
