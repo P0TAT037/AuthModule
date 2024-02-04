@@ -1,5 +1,6 @@
 ﻿using AuthModule.Data;
 using AuthModule.Data.Models.Abstract;
+using AutoMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -42,29 +43,35 @@ public class AuthSettings<TUser, TUserId>
 
 public class JwtTokenSettings
 {
+    public delegate void D(out JwtBearerOptions options);
+
     public string SecurityAlgorithm { get; set; } = SecurityAlgorithms.HmacSha256;
     
     public TimeSpan Expiration { get; set; } = TimeSpan.FromHours(1);
-    
-    public JwtBearerOptions? ConfigOptions { get; set; }
 
-    internal JwtBearerOptions ConfigureJwtBearerOptions(JwtBearerOptions o)
+    public JwtBearerOptions? Options { get; private set; }
+
+    public Action<JwtBearerOptions>? ConfigOptions { get; set; }
+
+    internal void ConfigureJwtBearerOptions(JwtBearerOptions options)
     {
-        return ConfigOptions;
+        if (ConfigOptions != null)
+            ConfigOptions(options);
+        
+        Options = options;
     }
-
-    //public void ConfigJwtOptions(JwtBearerOptions options)
-    //{
-
-    //}
 }
 
 public class CookieSettings
 {
-    public CookieAuthenticationOptions? CookieAuthenticationOptions { get; set; }
-    internal CookieAuthenticationOptions ConfigureCookieAuthenticationOptions(CookieAuthenticationOptions options) 
+    public CookieAuthenticationOptions? Options { get; private set; }
+    public Action<CookieAuthenticationOptions>? ConfigOptions { get; set; }
+    internal void ConfigureCookieAuthenticationOptions(CookieAuthenticationOptions options) 
     {
-        return CookieAuthenticationOptions;
+        if(ConfigOptions != null)
+            ConfigOptions(options);
+        
+        Options = options;
     }
 
 }

@@ -24,7 +24,7 @@ public static class Extensions
         where TUserRegistrationDto : class, IUserDto
     {
 
-        var defaultAuthScheme = authSettings.UseCookies? CookieAuthenticationDefaults.AuthenticationScheme: JwtBearerDefaults.AuthenticationScheme;
+        var defaultAuthScheme = authSettings.UseCookies? CookieAuthenticationDefaults.AuthenticationScheme : JwtBearerDefaults.AuthenticationScheme;
 
         services.AddSingleton(authSettings.JwtTokenSettings!);
 
@@ -47,21 +47,10 @@ public static class Extensions
         {
             builder.AddRequirements(new SatisfiedRequirement());
         }));
-        
-        var autheBuilder = services.AddAuthentication("JWT_OR_COOKIE")
-            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o=>authSettings.CookieSettings!.ConfigureCookieAuthenticationOptions(o))
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, o => authSettings.JwtTokenSettings!.ConfigureJwtBearerOptions(o))
-            .AddPolicyScheme("JWT_OR_COOKIE", "JWT_OR_COOKIE", options =>
-            {
-                options.ForwardDefaultSelector = context =>
-                {
-                    string authorization = context.Request.Headers[HeaderNames.Authorization];
-                    if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
-                        return JwtBearerDefaults.AuthenticationScheme;
 
-                    return CookieAuthenticationDefaults.AuthenticationScheme;
-                };
-            });
+        var autheBuilder = services.AddAuthentication(defaultAuthScheme)
+            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, authSettings.JwtTokenSettings!.ConfigureJwtBearerOptions!)
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, authSettings.CookieSettings!.ConfigureCookieAuthenticationOptions!);
 
         return autheBuilder;
 
