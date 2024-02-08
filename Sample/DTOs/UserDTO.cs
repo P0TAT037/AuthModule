@@ -1,10 +1,9 @@
 ﻿using AuthModule.DTOs.Abstract;
 
-namespace Sample.DTOs
+namespace Sample.DTOs;
+
+public class UserDTO : IUserDto
 {
-    public class UserDTO : IUserDto
-    {
-        public string Handle { get; set; }
-        public string Password { get; set; }
-    }
+    public string Handle { get; set; }
+    public string Password { get; set; }
 }

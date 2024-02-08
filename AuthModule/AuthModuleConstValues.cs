@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthModule
+namespace AuthModule;
+
+public class AuthModuleConstValues
 {
-    public class AuthModuleConstValues
-    {
-        public const string AdminPolicy = "AuthModuleAdmin";
-    }
+    public const string AdminPolicy = "AuthModuleAdmin";
 }

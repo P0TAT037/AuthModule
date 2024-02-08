@@ -13,7 +13,7 @@ public class AuthSettings<TUser, TUserId>
     where TUser : class, IUser<TUser, TUserId>
 {
     private readonly List<PropertyInfo> userInfoClaims = new List<PropertyInfo>();
-
+    
     public delegate DbContextOptionsBuilder DbOptionsBuilder(DbContextOptionsBuilder optionsBuilder);
 
     public bool UseCookies { get; set; }
@@ -43,7 +43,6 @@ public class AuthSettings<TUser, TUserId>
 
 public class JwtTokenSettings
 {
-    public delegate void D(out JwtBearerOptions options);
 
     public string SecurityAlgorithm { get; set; } = SecurityAlgorithms.HmacSha256;
     
@@ -65,6 +64,7 @@ public class JwtTokenSettings
 public class CookieSettings
 {
     public CookieAuthenticationOptions? Options { get; private set; }
+    
     public Action<CookieAuthenticationOptions>? ConfigOptions { get; set; }
     internal void ConfigureCookieAuthenticationOptions(CookieAuthenticationOptions options) 
     {

@@ -5,9 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AuthModule.Security.Requirements
+namespace AuthModule.Security.Requirements;
+
+internal class SatisfiedRequirement : IAuthorizationRequirement
 {
-    internal class SatisfiedRequirement : IAuthorizationRequirement
-    {
-    }
 }

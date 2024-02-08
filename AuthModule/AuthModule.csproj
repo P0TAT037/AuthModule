@@ -4,12 +4,29 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>AuthModule</Title>
+    <Version>0.0.2-beta</Version>
+    <Authors>P0TAT037</Authors>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>solved the database not getting populated problem mentioned in issue #2 on github.</PackageReleaseNotes>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>authentication;web-api</PackageTags>
+    <RepositoryUrl>https://github.com/P0TAT037/AuthModule/</RepositoryUrl>
+    <Copyright>open source, free to use.</Copyright>
+    <Description>AuthModule provides support for JWT/cookie authentication and creates and manages the user database for your web api. all with two function calls and a little configuration</Description>
+    <PackageIcon>mo2.jpg</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Data\Migrations\**" />
-    <EmbeddedResource Remove="Data\Migrations\**" />
-    <None Remove="Data\Migrations\**" />
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="C:\Users\Potato\Desktop\mo2.jpg">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

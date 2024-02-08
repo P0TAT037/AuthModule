@@ -2,8 +2,7 @@
 using AuthModule.Data;
 using AuthModule.Data.Models.Abstract;
 using AuthModule.DTOs.Abstract;
-using AuthModule.Security;
-using AuthModule.Security.Handlesr;
+using AuthModule.Security.Handlers;
 using AuthModule.Security.Requirements;
 using AuthModule.Services;
 using AuthModule.Services.Interfaces;
@@ -13,7 +12,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Net.Http.Headers;
 
 namespace AuthModule;
 

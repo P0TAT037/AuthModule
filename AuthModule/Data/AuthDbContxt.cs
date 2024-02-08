@@ -9,7 +9,7 @@ public class AuthDbContxt<TUser, TUserId> : DbContext where TUser : class, IUser
 
     public AuthDbContxt(DbContextOptions options) : base(options)
     {
-
+        
     }
 
     public DbSet<TUser> Users { get; set; }
