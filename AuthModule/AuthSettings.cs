@@ -13,7 +13,7 @@ public class AuthSettings<TUser, TUserId>
     where TUser : class, IUser<TUser, TUserId>
 {
     private readonly List<PropertyInfo> userInfoClaims = new List<PropertyInfo>();
-
+    
     public delegate DbContextOptionsBuilder DbOptionsBuilder(DbContextOptionsBuilder optionsBuilder);
 
     public bool UseCookies { get; set; }
